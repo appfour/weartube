@@ -1,0 +1,176 @@
+<html>
+<head>
+</head>
+<body>
+	
+	<script src="http://www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>
+
+		// Cast receiver
+
+		window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
+
+		window.castReceiverManager.onReady = function (event) {
+		}
+
+		window.castReceiverManager.onSenderConnected = function (event) {
+		}
+
+		window.castReceiverManager.onSenderDisconnected = function (event) {
+			var senders = window.castReceiverManager.getSenders();
+			if (event.reason == cast.receiver.system.DisconnectReason.REQUESTED_BY_SENDER)
+				window.close();
+		}
+
+		window.castReceiverManager.onSystemVolumeChanged = function (event) {
+		}
+
+		window.castReceiverManager.onVisibilityChanged = function (event) {
+		}
+
+		window.messageBus = window.castReceiverManager.getCastMessageBus('urn:x-cast:com.appfour.weartube',
+											cast.receiver.CastMessageBus.MessageType.JSON);
+
+		window.messageBus.onMessage = function (event) {
+			var message = event.data;
+			var command = message.command;
+			if (command == 'startVideo') {
+				var videoId = message.videoId;
+				var quality = message.quality;
+				var volume = parseInt(message.volume);
+				playVideo(videoId, quality, volume);
+			} else if (command == 'pauseVideo') {
+				pauseVideo();
+			} else if (command == 'resumeVideo') {
+				resumeVideo();
+			} else if (command == 'seekInVideo') {
+				var time = parseInt(message.time);
+				seekInVideo(time);
+			} else if (command == 'setVolume') {
+				var volume = parseInt(message.volume);
+				setVolume(volume);
+			}
+		}
+
+		function sendMessage(message) {
+			window.messageBus.broadcast(message);
+		}
+
+		var appConfig = new cast.receiver.CastReceiverManager.Config();
+		appConfig.statusText = 'Ready to play';
+		appConfig.maxInactivity = 6000;
+		window.castReceiverManager.start(appConfig);
+
+
+		// Youtube player
+
+		var player;
+		var playerIsReady = false;
+		var currentVideoId;
+		var currentVideoQuality;
+		var hasFinished = false;
+		var currentVolume = 100;
+
+		window.addEventListener('load', function () {
+			var tag = document.createElement('script');
+			tag.src = "https://www.youtube.com/iframe_api";
+			var firstScriptTag = document.getElementsByTagName('script')[0];
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		});
+
+		function onYouTubeIframeAPIReady() {
+			player = new YT.Player('player', {
+				height: '100%',
+				width: '100%',
+				playerVars: { 
+					autoplay: 0, 
+					controls: 0, 
+					rel: 0,
+					showinfo: 0,
+					loop: 0
+				},
+				events: {
+					onReady: onPlayerReady,
+					onStateChange: onPlayerStateChange
+				}
+			});
+		}
+
+		function onPlayerReady(event) {
+			playerIsReady = true;
+		}
+
+		function onPlayerStateChange(event) {
+			if (event.data == YT.PlayerState.ENDED && !hasFinished) {
+				//player.stopVideo();
+				hasFinished = true;
+			}
+			sendMessage({
+				event: 'stateChange',
+				isPlaying: event.data == YT.PlayerState.PLAYING,
+				isPaused: event.data == YT.PlayerState.PAUSED,
+				isFinished: event.data == YT.PlayerState.ENDED,
+				duration: player.getDuration() * 1000,
+				time: player.getCurrentTime() * 1000,
+			});
+		}
+
+		function sendCurrentTime() {
+			if (!hasFinished) setTimeout(sendCurrentTime, 1000);
+			sendMessage({
+				event: 'timeChange',
+				time: player.getCurrentTime() * 1000,
+			});
+		}
+
+		function playVideo(videoId, quality, volume) {
+			hasFinished = false;
+			currentVideoId = videoId;
+			currentVideoQuality = quality;
+			currentVolume = volume;
+			playCurrentVideo();
+		}
+
+		function playCurrentVideo() {
+			if (!playerIsReady)
+				setTimeout(playCurrentVideo, 1000);
+			else {
+				player.loadVideoById(currentVideoId, 0, currentVideoQuality);
+				player.setVolume(currentVolume);
+				sendCurrentTime();
+			}
+		}
+
+		function pauseVideo() {
+			player.pauseVideo();
+		}
+
+		function resumeVideo() {
+			player.playVideo();
+		}
+
+		function seekInVideo(time) {
+			player.seekTo(time / 1000, true);
+		}
+
+		function setVolume(volume) {
+			currentVolume = volume;
+			player.setVolume(volume);
+		}
+
+	</script>
+	<style>
+		#wrapper {
+			width: 100%;
+		}
+		body {    
+			margin: 0 !important;
+			padding: 0 !important;
+		}
+	</style>
+	<div id="wrapper">
+		<div id="player"></div>
+	</div>
+</body>
+</html>
