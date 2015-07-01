@@ -17,7 +17,6 @@
 			player = new YT.Player('player', {
 				height: '100%',
 				width: '100%',
-				suggestedQuality: 'medium',
 				playerVars: {
 					autoplay: 0,
 					controls: 1,
@@ -31,6 +30,8 @@
 					'onError': onPlayerError
 				}
 			});
+			player.setPlaybackQuality('small');
+			alert(player.getPlaybackQuality());
 		}
 
 		function onPlayerStateChange(event) {
