@@ -24,20 +24,21 @@
 					showinfo: 0,
 					loop: 0,
 				},
-					videoId: 'HC1MmjPu3Xo',
 			   	events: {
 					'onStateChange': onPlayerStateChange,
 					'onError': onPlayerError
 				}
 			});
-			player.setPlaybackQuality('small');
-			alert(player.getPlaybackQuality());
+			player.loadVideoById('HC1MmjPu3Xo',0 'small');
 		}
 
 		function onPlayerStateChange(event) {
                 var levels = player.getAvailableQualityLevels();
-alert(levels);
-    			console.log('levels: '+levels);
+		alert('levels: '+levels);
+    		console.log('levels: '+levels);
+                var level = player.getPlaybackQuality();
+		alert('curr: '+level);
+    		console.log('curr: '+level);
 		}
 		
 		function onPlayerError(event) {
