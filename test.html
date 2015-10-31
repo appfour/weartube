@@ -6,47 +6,90 @@
 
 <script>
 		// Youtube player
+
 		var player;
 		window.addEventListener('load', function () {
 			var tag = document.createElement('script');
-			tag.src = "https://www.youtube.com/iframe_api";
+			tag.src = "http://www.youtube.com/iframe_api";
 			var firstScriptTag = document.getElementsByTagName('script')[0];
 			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 		});
+
 		function onYouTubeIframeAPIReady() {
 			player = new YT.Player('player', {
 				height: '100%',
 				width: '100%',
+				suggestedQuality: JavaPlayerInterface.getSuggestedQuality(),
 				playerVars: {
 					autoplay: 0,
-					controls: 1,
+					controls: 0,
 					rel: 0,
 					showinfo: 0,
-					loop: 0,
+					loop: 0
 				},
 			   	events: {
+					'onReady': onPlayerReady,
 					'onStateChange': onPlayerStateChange,
-					'onError': onPlayerError,
-					'onReady': onPlayerReady
+					'onError': onPlayerError
 				}
 			});
 		}
 
-		function onPlayerStateChange(event) {
-                var levels = player.getAvailableQualityLevels();
-                var level = player.getPlaybackQuality();
-    		console.log('levels: '+levels);
-    		console.log('curr: '+level);
-		alert('levels: '+levels);
-		alert('curr: '+level);
-		}
-		
-		function onPlayerError(event) {
+		function onPlayerReady(event) {
+			JavaPlayerInterface.onPlayerReady();
 		}
 
-		function onPlayerReady(event) {
-			player.loadVideoById('HC1MmjPu3Xo',0, 'small');
+		function onPlayerStateChange(event) {
+			JavaPlayerInterface.onPlayerStateChange(event.data);
 		}
+
+		function onPlayerError(event) {
+			JavaPlayerInterface.onPlayerError(event.data);
+		}
+
+		function playVideo() {
+			player.playVideo();
+		}
+
+		function pauseVideo() {
+			player.pauseVideo();
+		}
+
+		function stopVideo() {
+			player.stopVideo();
+		}
+
+		function cueVideo(id, start) {
+			player.cueVideoById(id, start, JavaPlayerInterface.getSuggestedQuality());
+		}
+
+		function loadVideo(id, start) {
+			player.loadVideoById(id, start, JavaPlayerInterface.getSuggestedQuality());
+		}
+
+		function seekTo(seconds) {
+			player.seekTo(seconds, true);
+		}
+
+		function getCurrentTime() {
+			return player.getCurrentTime();
+		}
+
+		function getDuration() {
+			player.pauseVideo();
+			duration = player.getDuration();
+			player.playVideo();
+			return duration;
+		}
+
+		function getAvailableQualityLevels() {
+			return player.getAvailableQualityLevels();
+		}
+
+		function getPlaybackQuality() {
+			return player.getPlaybackQuality();
+		}
+
 </script>
 <style>
     #wrapper {
