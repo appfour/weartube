@@ -17,8 +17,8 @@
 			player = new YT.Player('player', {
 				height: '100%',
 				width: '100%',
-				videoId: 'ADuUQT_fPCw',
-				suggestedQuality: 'small',
+				videoId: getParameterByName('id'),
+				suggestedQuality: getparameterByName('quality'),
 				playerVars: {
 					autoplay: 0,
 					controls: 0,
@@ -34,8 +34,14 @@
 			});
 		}
 
+		function getParameterByName(name) {
+		    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		        results = regex.exec(location.search);
+		    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+		
 		function onPlayerReady(event) {
-			console.log('player ready');
 			player.playVideo();
 		}
 
