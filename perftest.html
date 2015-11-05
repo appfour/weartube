@@ -1,1 +1,78 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body bgcolor="#000000">
 
+<script>
+		// Youtube player
+		var player;
+		window.addEventListener('load', function () {
+			var tag = document.createElement('script');
+			tag.src = "https://www.youtube.com/iframe_api";
+			var firstScriptTag = document.getElementsByTagName('script')[0];
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		});
+		function onYouTubeIframeAPIReady() {
+			player = new YT.Player('player', {
+				height: '100%',
+				width: '100%',
+				suggestedQuality: JavaPlayerInterface.getSuggestedQuality(),
+				playerVars: {
+					autoplay: 0,
+					controls: 0,
+					rel: 0,
+					showinfo: 0,
+					loop: 0
+				},
+			});
+			player.loadVideoById('QddDLNmaOFI', 0, JavaPlayerInterface.getSuggestedQuality());
+		}
+		function playVideo() {
+			player.playVideo();
+		}
+		function pauseVideo() {
+			player.pauseVideo();
+		}
+		function stopVideo() {
+			player.stopVideo();
+		}
+		function cueVideo(id, start) {
+			player.cueVideoById(id, start, JavaPlayerInterface.getSuggestedQuality());
+		}
+		function loadVideo(id, start) {
+			player.loadVideoById(id, start, JavaPlayerInterface.getSuggestedQuality());
+		}
+		function seekTo(seconds) {
+			player.seekTo(seconds, true);
+		}
+		function getCurrentTime() {
+			return player.getCurrentTime();
+		}
+		function getDuration() {
+			player.pauseVideo();
+			duration = player.getDuration();
+			player.playVideo();
+			return duration;
+		}
+		function getAvailableQualityLevels() {
+			return player.getAvailableQualityLevels();
+		}
+		function getPlaybackQuality() {
+			return player.getPlaybackQuality();
+		}
+</script>
+<style>
+    #wrapper {
+    width: 100%;
+    }
+    body {
+    margin: 0 !important;
+    padding: 0 !important;
+    }
+</style>
+<div id="wrapper">
+    <div id="player"></div>
+</div>
+</body>
+</html>
