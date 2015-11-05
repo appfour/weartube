@@ -32,11 +32,11 @@
 					'onError': onPlayerError
 				}
 			});
-//			player.loadVideoById('N0zoo6lqJ6E', 0, 'small');
 		}
 
 		function onPlayerReady(event) {
 			console.log('player ready');
+			player.playVideo();
 		}
 
 		function onPlayerStateChange(event) {
