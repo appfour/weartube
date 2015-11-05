@@ -28,39 +28,6 @@
 			});
 			player.loadVideoById('N0zoo6lqJ6E', 0, 'small');
 		}
-		function playVideo() {
-			player.playVideo();
-		}
-		function pauseVideo() {
-			player.pauseVideo();
-		}
-		function stopVideo() {
-			player.stopVideo();
-		}
-		function cueVideo(id, start) {
-			player.cueVideoById(id, start, JavaPlayerInterface.getSuggestedQuality());
-		}
-		function loadVideo(id, start) {
-			player.loadVideoById(id, start, JavaPlayerInterface.getSuggestedQuality());
-		}
-		function seekTo(seconds) {
-			player.seekTo(seconds, true);
-		}
-		function getCurrentTime() {
-			return player.getCurrentTime();
-		}
-		function getDuration() {
-			player.pauseVideo();
-			duration = player.getDuration();
-			player.playVideo();
-			return duration;
-		}
-		function getAvailableQualityLevels() {
-			return player.getAvailableQualityLevels();
-		}
-		function getPlaybackQuality() {
-			return player.getPlaybackQuality();
-		}
 </script>
 <style>
     #wrapper {
