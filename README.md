@@ -1,3 +1,3 @@
 # weartube
 
-This repo is at https://appfour.github.io/weartube/stripecheckoutest.html
+This repo is at https://appfour.github.io/weartube
