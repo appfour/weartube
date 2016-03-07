@@ -15,9 +15,6 @@
 
   function openCheckout()
   {
-    alert('foo');
-  $('#customButton').on('click', function(e) {
-    // Open Checkout with further options
     handler.open({
       name: 'appfour GmbH',
       description: '2 widgets',
@@ -30,8 +27,7 @@
       bitcoin: true,
       billingAddress: true
     });
-    e.preventDefault();
-  });
+
   }
 </script>  
   
