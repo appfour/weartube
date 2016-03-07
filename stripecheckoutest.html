@@ -1,24 +1,42 @@
 <html>
-<head></head>
-<body>
-<form action="/charge" method="POST">
-  <script
-    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
-    data-image="/img/documentation/checkout/marketplace.png"
-    data-name="appfour GmbH"
-    data-image="http://www.appfour.com/img/aide.png" 
-    data-allow-remember-me="false"
-    data-description="AIDE Yearly subscription"
-    data-alipay="true"
-    data-alipay-reusable="true"
-    data-bitcoin="true"
-    data-amount="2000"
-    data-currency="USD"
-    data-locale="auto"
-    data-panel-label="Subscribe for {{amount}}"
->
-  </script>
-</form>
+<head>
+<script src="https://checkout.stripe.com/checkout.js"></script>
+
+<button id="customButton">Purchase</button>
+
+<script>
+  var handler = StripeCheckout.configure({
+    key: 'pk_test_6pRNASCoBOKtIshFeQd4XMUh',
+    image: 'http://www.appfour.com/img/aide.png',
+    locale: 'auto',
+    token: function(token) {
+      // Use the token to create the charge with a server-side script.
+      // You can access the token ID with `token.id`
+    }
+  });
+
+  function openCheckout()
+  {
+  $('#customButton').on('click', function(e) {
+    // Open Checkout with further options
+    handler.open({
+      name: 'appfour GmbH',
+      description: '2 widgets',
+      amount: 2000,
+      currency: 'USD',
+      panelLabel: 'Subscribe for {{amount}}',
+      allowRememberMe: false,
+      alipay: true,
+      alipayReusable: true,
+      bitcoin: true,
+      billingAddress: true
+    });
+    e.preventDefault();
+  });
+  }
+</script>  
+  
+</head>
+<body onLoad="openCheckout()">
 </body>
 </html>
