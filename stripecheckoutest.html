@@ -8,6 +8,7 @@
     image: 'https://www.appfour.com/img/aide.png',
     locale: 'auto',
     token: function(token) {
+      iapCallback.purchaseCompleted(token.email, token.id);
       // Use the token to create the charge with a server-side script.
       // You can access the token ID with `token.id`
     }
@@ -16,15 +17,15 @@
   function openCheckout()
   {
     handler.open({
-      name: 'appfour GmbH',
-      description: '2 widgets',
-      amount: 2000,
-      currency: 'USD',
-      panelLabel: 'Subscribe for {{amount}}',
+      name: iapCallback.getName(),
+      description: iapCallback.getDescription(),
+      amount: iapCallback.getAmount(),
+      currency: iapCallback.getCurrency(),
+      panelLabel: getPanelLabel(),
       allowRememberMe: false,
       alipay: true,
       alipayReusable: true,
-      bitcoin: true,
+      bitcoin: false,
       billingAddress: false
     });
 
