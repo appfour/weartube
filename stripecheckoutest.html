@@ -4,8 +4,8 @@
 
 <script>
   var handler = StripeCheckout.configure({
-    key: 'pk_test_b8Y7Tw05ALLl1XThJedzOmEu',
-    image: 'https://appfour.github.io/weartube/aidestripe.png',
+    key: iapCallback.getStripePublicKey(),
+    image: iapCallback.getStripeImageUrl(),
     locale: 'auto',
     token: function(token) {
       iapCallback.purchaseCompleted(token.email, token.id);
