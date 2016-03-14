@@ -22,11 +22,13 @@
       amount: iapCallback.getAmount(),
       currency: iapCallback.getCurrency(),
       panelLabel: iapCallback.getPanelLabel(),
-      allowRememberMe: false,
-      alipay: true,
-      alipayReusable: true,
-      bitcoin: false,
-      billingAddress: false
+      allowRememberMe: iapCallback.allowRememberMe(),
+      alipay: iapCallback.alipayEnabled(),
+      alipayReusable: iapCallback.alipayReusable(),
+      bitcoin: iapCallback.bitcoinEnabled(),
+      billingAddress: iapCallback.collectBillingAddress()
+      email: iapCallback.getEmail(),
+      zipCode: iapCallback.validateZipCode()
     });
 
   }
