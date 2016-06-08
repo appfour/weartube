@@ -9,8 +9,9 @@ function startTime() {
     var s = today.getSeconds();
     m = checkTime(m);
     s = checkTime(s);
-    document.getElementById('txt').innerHTML =
-    h + ":" + m + ":" + s;
+    var time = h + ":" + m + ":" + s;
+    document.getElementById('txt').innerHTML = time;
+    console.log("Time: "+time);
     var t = setTimeout(startTime, 500);
 }
 function checkTime(i) {
